@@ -7,7 +7,7 @@ draft: false
 # Opensource Contributions 
 
 ## cChoco/cChocoFeature 
-At work we had a need to set chocolatey features via DSC, so we could roll out configuration changes to our clients. I developed this resource in our branched version of cChoco and worked with Chocolatey Software to merge our newly developed resource back in to the community resource.
+At work we had a need to set chocolatey features via DSC, so we could roll out configuration changes to our clients. I developed this resource in our branched version of cChoco and worked with Chocolatey Software to merge our newly developed resource back in to the community project.
 
 Link to merge: [5b57ef4](https://github.com/chocolatey/cChoco/commit/5b57ef464822737679702b07e32897f108e52b37)
 
