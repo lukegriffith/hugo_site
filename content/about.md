@@ -12,9 +12,9 @@ He has a long background supporting and engineering Windows based solutions, but
 He has a keen interest in software development, CI/CD, reusable software design and enjoys building platforms and designing frameworks. 
 
 ## Whats he's been doing
-I've been working fulltime in IT for the last 7 years, starting from a service desk level and working my way up through support to engineering, I've worked at internet service providers, managed service providers and am now working for a financial research company.
+I've been working fulltime in IT for the last 7 years, starting from a service desk level and working my way up to support then engineering, I've worked at an internet service provider, a managed service provider and am now working for a financial research company.
 
-My current role is based heavily around systems automation, In my spare time I also study part-time and am half-way through a BSc in Computing.
+My current role is based heavily around systems automation, In my spare time I also study part-time and am half-way through a Computing BSc.
 
 ### Systems Engineer @ G-Research
 My day-to-day involves a lot of designing, scripting and responding to issues detected from our testing pipelines, I've been fortunate to be have been given a lot of creative freedom and the oppurtinity to get invovled in a lot of research. My current role is mainly project based.
@@ -34,6 +34,7 @@ Projects I've been involved with:
     - Development of ansible playbooks.
 
 Currently working on:
+
 - Self-Service infrastructure pipelines for hybrid cloud workloads.
     - AWS, OpenStack.
     - Jenkins, Git, Terraform.
