@@ -17,7 +17,7 @@ googleAnalytics     = "UA-123-45"
 blog  = "blog/:slug/"
 
 [[menu.main]]
-name                   = "Blog"
+name                   = "blog"
 weight                 = -120
 identifier             = "blog"
 url                    = "/blog/"
