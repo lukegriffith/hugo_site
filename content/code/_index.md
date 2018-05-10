@@ -12,7 +12,7 @@ Development of a DSC resource to set Chocolatey client features via configuratio
 
 
 ## Personal Projects 
-
+<!--
 ### MonzoToYnab [(Git)](https://github.com/lukemgriffith/MonzoToYnab)
 Monzo is a UK based online first bank. Ynab is a budgeting application that allows you to track expenses and keep monthly pots. Unfortunately Ynab does not support auto syncing with pretty much all UK banks but offers a great REST api and Monzo supports transaction webhooks. 
 
@@ -103,3 +103,4 @@ Studying for my data structures course, I implemented a BFS algorithm to find th
 </section>
 <script src="/scr/bfs_Grid.js"></script>
 <script src="/scr/bfs_Main.js"></script>
+-->
