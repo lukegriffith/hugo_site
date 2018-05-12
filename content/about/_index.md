@@ -4,46 +4,50 @@ date: 2018-02-05T00:58:52Z
 draft: false
 ---
 
+# DevOps, PowerShell & Python
+Luke is a passionate and highly focused individual, dedicated to learning about technology and its implementation. With over 7 years of IT experience working with business critical infrastructure, and applications. His primary skills set is around infrastructure and operating systems, configuration automation and testing. 
 
-Luke is a passionate and highly focused individual, dedicated to learning about technology and its implementation. With over 7 years of IT experience working with business critical infrastructure, and applications. His primary skills set is around infrastructure and os, automation, configuration and testing. 
-
-He has a long background supporting and engineering Windows based solutions, but is familiar and comfortable with Linux and is most at home at the shell.
+He has a long background supporting and engineering Windows based solutions, but is comfortable and keen to learn more about Linux, spending most of his work day at the shell.
 
 He has a keen interest in software development, CI/CD, reusable software design and enjoys building platforms and designing frameworks. 
 
 ## Whats he's been doing
-I've been working fulltime in IT for the last 7 years, starting from a service desk level and working my way up to support then engineering, I've worked at an internet service provider, a managed service provider and am now working for a financial research company.
+I've been working fulltime working with various technologies for the last 7 years, I've seen many aspects of IT operations and engineering starting from the service desk moving onto high level problem management, principal client support, then onto engineering and automation development, I've worked at an internet service provider, a managed service provider and am now working for a financial research company.
 
-My current role is based heavily around systems automation, In my spare time I also study part-time and am half-way through a Computing BSc.
+My current role is based heavily around systems automation and now specifically focusing on AWS. In my spare time I also study part-time and am half-way through a Computing BSc at Birkbeck University of London.
 
-### Systems Engineer @ G-Research (2016 - Present)
-My day-to-day involves a lot of designing, scripting and responding to issues detected from our testing pipelines, I've been fortunate to be have been given a lot of creative freedom and the oppurtinity to get invovled in a lot of research. My current role is mainly project based.
+### Systems Engineer @ G-Research (2015 - Present)
+My day-to-day involves a lot of designing, scripting and responding to issues detected from our testing pipelines, I've been fortunate to be have been given a lot of creative freedom and the oppurtunity to get invovled in a lot of research. My current role is entierly project based.
 
-_Full job history available on Linkedin._
+#### Currently working on
 
-## Currently working on
-
-### Internal cloud adoption
-- All configuration abstracted via automation frameworks (Ansible, Terraform).
-- Design of self-service infrastructure pipelines for hybrid cloud workloads.
+##### Internal cloud adoption
+- AWS and infrastructure configuration abstracted via automation frameworks (Ansible, Terraform).
+- Design of self-service infrastructure pipelines for intenral development teams.
 - Indepth automation of AWS account onboarding, boundry controls, and EC2 infrastructure.
 
-## Previous projects
+#### Previous projects
 
-### Developing windows configuration management baselines.
+##### Developing windows configuration management baselines.
 - Developing DCS resources.
 - TDD with pester.
 - CI/CD pipelines for test coverage & unit testing.
 
-### Windows package management.
-- Implementation & rollout of Chocolatey.
-- CI/CD pipeline to automate deployment of internal packages, from a VCS (200+ packages). 
+##### Windows package management.
+- Implementation & rollout of Chocolatey package management.
+    - Extending cChoco DSC resource (See [Open Source Contributions](/code))
+- CI/CD pipeline to automate deployment of internal packages, from a VCS (200+ packages).
 - Choolatey Business & Self-Service functionality. 
+- Pushing internal adoption of solution.
+- Migration from legacy system.
 
-### Windows OS deployment.
+##### Windows OS deployment.
 - Development and maintenance of ansible modules & playbooks.
 - Development and maintenance of powershell modules, and build scripts. 
 - Reverse downtime server deployments.
+
+
+_Full job history available on [Linkedin](http://linkedin.com/in/lukemgriffith)._
 
 
 ## University
