@@ -2,5 +2,5 @@
 
 ``` 
 git submodule init
-git submodule pull
+git submodule update
 ```
