@@ -1,7 +1,7 @@
 ---
 title: "DevOps vs Automation"
 date: 2019-03-19T22:56:00+00:00
-draft: false
+draft: true 
 ---
 
 Automation to me feels like the guy from Jurassic Park, the first movie - the programmer dude whos meant to be super obnoxious and creates the entire automation for the whole park, only problem is. When he gets eaten by the raptor the entire system is stuck without his access keys. 

@@ -5,7 +5,7 @@ draft: false
 ---
 
 
-# DevOps, PowerShell & Python
+# DevOps, Terraform & Ansible
 
 Luke is a passionate and highly focused individual, dedicated to learning about technology and its implementation. With over 7 years of IT experience working with business critical infrastructure, and applications. His primary skills set is around infrastructure and operating systems, configuration automation and testing.
 
