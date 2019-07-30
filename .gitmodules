@@ -1,9 +1,9 @@
 [submodule "themes/ananke"]
 	path = themes/ananke
-	url = https://github.com/budparr/gohugo-theme-ananke.git
+	url = git@github.com:budparr/gohugo-theme-ananke.git
 [submodule "themes/cocoa"]
 	path = themes/cocoa
-	url = https://github.com/nishanths/cocoa-hugo-theme.git
+	url = git@github.com:nishanths/cocoa-hugo-theme.git
 [submodule "public"]
 	path = public
-	url = https://github.com/lukemgriffith/lukemgriffith.github.io
+	url = git@github.com:lukemgriffith/lukemgriffith.github.io
