@@ -7,47 +7,58 @@ draft: false
 
 # DevOps, Terraform & Ansible
 
-Luke is a passionate and highly focused individual, dedicated to learning about technology and its implementation. With over 7 years of IT experience working with business critical infrastructure, and applications. His primary skills set is around infrastructure and operating systems, configuration automation and testing.
+Luke is a passionate and highly focused individual, dedicated to learning about 
+technology and its implementation. With 10 years of industry experience working 
+with business critical infrastructure, and applications his primary skills set 
+is infrastructure automation, configuration and testing through ci/cd methods 
+with experience in software engineering. He has experience leading small DevOps
+teams using agile methods. 
 
-He has a long background supporting and engineering Windows based solutions, but is comfortable and keen to learn more about Linux, spending most of his work day at the shell.
+With a long background supporting and engineering Windows based solutions, 
+the last couple years he's developed automation frameworks and solutions for 
+hybrid cloud platforms with workloads primarily running on a linux kernel. 
 
-He has a keen interest in software development, CI/CD, reusable software design and enjoys building platforms and designing frameworks.
+He has a keen interest in software development, CI/CD, reusable software design 
+and enjoys building platforms and designing frameworks.
 
-## Engineer @ G-Research (2015 - Present)
+## Cloud Engineer @ G-Research (2018 - Present)
 
-Currently within the cloud team, working on public and private cloud adoption throughout the business. 
+Currently within the cloud team, working on public and private cloud adoption 
+throughout the business. Works daily with Terraform, Ansible, Python and golang
+working on AWS and Openstack platforms. GitHub is the primary VCS system with 
+Jenkins, Ansible Tower, and Terraform Enterprise used to deliver ci/cd 
+workflows. 
 
-### Currently working on
+- Architect for hybrid cloud account vending pipeline (AWS and Openstack) 
+- In-depth automation of AWS account on-boarding (IAM, SCP & Org)
+infrastructure.
+- Design of self-service infrastructure pipelines for internal development 
+teams. (gitops)
+- Owner of on-prem IAC platforms for infrastructure and development teams 
+(Terraform Enterprise, Ansible Tower).
 
-#### Internal cloud adoption
+## Windows Automation Engineer @ G-Research (2015 - 2018)
 
-- AWS account vending framework (Terraform, Ansible)
-- Design of self-service infrastructure pipelines for internal development teams.
-- In-depth automation of AWS account on-boarding, boundary controls, and EC2 infrastructure.
-- Providing automation frameworks to infrastructure teams (Terraform Enterprise, Ansible Tower).
+An initial member of the automation team, building out configuration baselines
+and automated pipelines for OS deployment. Designed pipelines and processes 
+for package management solution.
 
-#### Previous projects
+- Powershell development & testing 
+- Config management & package management
+- Automated build systems
+- CI/CD methods /w Bamboo
+- Git / SVN 
 
-##### Developing windows configuration management baselines
+## Infrastructure Engineer @ Attenda (2011 - 2015
 
-- Developing DSC resources.
-- TDD with pester.
-- CI/CD pipelines for test coverage & unit testing.
+Support of client infrastructure across various technology stacks. Having to 
+show responsibility for problems using ITIL processes  and deal with a fast pace 
+customer focused environment.
 
-##### Windows package management
+- VMWare, AWX
+- Linux, Windows
+- Cisco ASA
 
-- Implementation & roll-out of Chocolatey package management.
-  - Extending cChoco DSC resource (See [Open Source Contributions](/code))
-- CI/CD pipeline to automate deployment of internal packages, from a VCS (200+ packages).
-- Choolatey Business & Self-Service functionality.
-- Pushing internal adoption of solution.
-- Migration from legacy system.
-
-##### Windows OS deployment
-
-- Development and maintenance of Ansible modules & playbooks.
-- Development and maintenance of powershell modules, and build scripts. 
-- Reverse downtime server deployments.
 
 _Full job history available on [Linkedin](http://linkedin.com/in/lukemgriffith)._
 
@@ -56,24 +67,25 @@ _Full job history available on [Linkedin](http://linkedin.com/in/lukemgriffith).
 
 ### Computing BSc @ Birkbeck
 
-Expected graduation is 2020, the course has helped me understand a lot of the history and fundamentals of computing technologies, but has also given me a broader understanding of the industry. My time at Birkbeck so far has taught me to be a better developer, understanding more of the terminology and concepts that underpin the technology I use on a daily basis.
+Expected graduation is 2020, the course has helped me understand a lot of the 
+history and fundamentals of computing technologies, but has also given me a 
+broader understanding of the industry. My time at Birkbeck so far has taught me 
+to be a better developer, understanding more of the terminology and concepts 
+that underpin the technology I use on a daily basis.
 
 Here is a subset of the modules I've found most interesting:
 
 - Software Programming.
 - Algorithm Design.
-- Information Systems Concepts & Management.
+- Computer organisation and system architecture
+- Machine learning concepts. 
 
 ### Languages
 
-|Python|Go|Bash|
-|:---:|:---:|:---:|
-|Bash|Java|C#|
-|PowerShell|JavaScript|C++|
+Python, Go, Bash, JavaScript, PowerShell
 
 ### Recent Tools
 
-|Terraform Enterprise|Terraform|Ansible|
-|:---:|:---:|:---:|
-|Ansible Tower |Docker |CodePipeline|
-|PowerShell DSC|Chocolatey||
+Terraform Enterprise, Terraform, Ansible, Ansible Tower, Docker,
+Kubernetes, Jenkins
+

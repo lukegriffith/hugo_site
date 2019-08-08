@@ -1,9 +1,4 @@
----
-title: "Luke Griffith"
-#date: 2018-02-05T00:58:52Z
-draft: false
----
-
+# Luke Griffith
 
 **email**: lukemgriffith@gmail.com 
 **git**: [github.com/lukemgriffith](https://github.com/lukemgriffith)
@@ -26,6 +21,7 @@ hybrid cloud platforms with workloads primarily running on a linux kernel.
 He has a keen interest in software development, CI/CD, reusable software design 
 and enjoys building platforms and designing frameworks.
 
+# Work Histroy
 ## Cloud Engineer @ G-Research (2018 - Present)
 
 Currently within the cloud team, working on public and private cloud adoption 
@@ -60,7 +56,7 @@ Support of client infrastructure across various technology stacks. Having to
 show responsibility for problems using ITIL processes  and deal with a fast pace 
 customer focused environment.
 
-- VMWare, AWX
+- VMWare, AWS
 - Linux, Windows
 - Cisco ASA
 
@@ -69,9 +65,9 @@ _Full job history available on [Linkedin](http://linkedin.com/in/lukemgriffith).
 
 \pagebreak 
 
-## University
+# University
 
-### Computing BSc @ Birkbeck
+## Computing BSc @ Birkbeck
 
 Expected graduation is 2020, the course has helped me understand a lot of the 
 history and fundamentals of computing technologies, but has also given me a 
@@ -86,12 +82,35 @@ Here is a subset of the modules I've found most interesting:
 - Computer organisation and system architecture
 - Machine learning concepts. 
 
-### Languages
+# Skills / Accreditations 
+
+## Languages
 
 Python, Go, Bash, JavaScript, PowerShell
 
-### Recent Tools
+## Recent Tools
 
 Terraform Enterprise, Terraform, Ansible, Ansible Tower, Docker,
 Kubernetes, Jenkins
+
+## Accrediations 
+
+AWS Certified Solutions Architect - Associate (Expired Aug 2020)
+
+<img src="AWSCertified.png" />
+
+
+## Courses / Conferences
+
+- Consul 101: Connect Dynamic Applications (September 2019)
+- HashiConf 2019, Seattle (September 2019)
+- Kubernetes in practice /w Jetstack (April 2019)
+- Terraform 201: Collaborative Infrastructure Automation (July 2018)
+- HashiDays 2018, Amsterdam (July 2018)
+- AWS Solutions Architect - Associate Certificate /w QA (June 2018)
+- DockerCon, Austin TX (April 2017)
+
+
+
+
 
