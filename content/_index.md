@@ -9,7 +9,7 @@ draft: false
 
 BSc (Hons) Computing [Birkbeck, University of London](http://www.bbk.ac.uk/) _2016 to 2020_
 
-10+ years of IT experience. Experience at a managed service provider, hedge fund and fintech startup.
+10+ years of IT experience. 
 
 Interested in DevOps, Cloud Software, Kubernetes and Golang.
 
