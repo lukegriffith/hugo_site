@@ -21,13 +21,24 @@ hybrid cloud platforms with workloads primarily running on a linux kernel.
 He has a keen interest in software development, CI/CD, reusable software design 
 and enjoys building platforms and designing frameworks.
 
-## Cloud Engineer @ G-Research (2018 - Present)
+## Senior Developer @ Duco (2019 - Present)
 
-Currently within the cloud team, working on public and private cloud adoption 
-throughout the business. Works daily with Terraform, Ansible, Python and golang
-working on AWS and Openstack platforms. GitHub is the primary VCS system with 
-Jenkins, Ansible Tower, and Terraform Enterprise used to deliver ci/cd 
-workflows. 
+Production experience maturing and developing Duco's Infrastructure as Code pipelines for Duco's cloud computing platform based on Kubernetes. Role entails many hats including with a range of responsibilities across development and operations.
+
+Touching the following technologies daily:
+
+- Terraform 
+- Kubernets (EKS + RKE) 
+- AWS
+- GitLab CI
+- Prometheus
+- Portworx
+
+Additionally using Golang to simplify automation solutions for the company, contributing to open source projects, mainly Terraform providers and upstream libraries.
+
+## Cloud Engineer @ G-Research (2018 - 2019)
+
+Working on public and private cloud adoption throughout the business. Works daily with Terraform, Ansible, Python and golang working on AWS and Openstack platforms. GitHub is the primary VCS system with Jenkins, Ansible Tower, and Terraform Enterprise used to deliver ci/cd workflows. 
 
 - Architect for hybrid cloud account vending pipeline (AWS and Openstack) 
 - In-depth automation of AWS account on-boarding (IAM, SCP & Org)
@@ -87,5 +98,5 @@ Python, Go, Bash, JavaScript, PowerShell
 ### Recent Tools
 
 Terraform Enterprise, Terraform, Ansible, Ansible Tower, Docker,
-Kubernetes, Jenkins
+Kubernetes, Jenkins, Gitlab
 

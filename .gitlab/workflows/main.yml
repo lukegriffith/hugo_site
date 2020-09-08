@@ -1,0 +1,62 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy Website
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: false  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.74.2'
+          # extended: true
+
+      - name: Setup Public
+        run: |
+          mkdir -p ~/.ssh
+          mkdir -p public
+          echo "$access_key" > ~/.ssh/id_rsa
+          chmod 0400 ~/.ssh/id_rsa
+          cd public
+          git init
+          git remote add website git@github.com:lukemgriffith/lukemgriffith.github.io.git
+          git pull website master
+          rm ~/.ssh/id_rsa
+        env:
+          access_key: ${{ secrets.REPO_ACCESS }}
+
+
+      - name: Build
+        run: hugo -t cocoa
+
+      - name: Deploy
+        run: |
+          #mkdir -p ~/.ssh
+          #mkdir -p public
+          #echo "$access_key" > ~/.ssh/id_rsa
+          chmod 0400 ~/.ssh/id_rsa
+          cd public
+          git config --global user.email "luke@cloudcaptain.co"
+          git config --global user.name "Luke Griffith"
+          git add -A
+          git commit -m "website update"
+          git push website master
+          rm ~/.ssh/id_rsa
+        env:
+          access_key: ${{ secrets.REPO_ACCESS }}
+
