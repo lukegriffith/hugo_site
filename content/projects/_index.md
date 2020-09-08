@@ -5,7 +5,7 @@ draft: false
 ---
 
 
-# Cloud Captain 
+# Co-Founder of Cloud Captain 
 
 Cloud software organization that develops automation products and contributing to opensource.
 
