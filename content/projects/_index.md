@@ -4,16 +4,7 @@ date: 2018-02-05T00:59:10Z
 draft: false
 ---
 
-
-# Co-Founder of Cloud Captain 
-
-Cloud software organization that develops automation products and contributing to opensource.
-
-[Website](https://cloudcaptainco.github.io/)
-
 # Opensource Contributions 
-
-
 
 ## Gitlab Terraform Provider
 
