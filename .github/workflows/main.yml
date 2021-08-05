@@ -42,7 +42,10 @@ jobs:
 
 
       - name: Build
-        run: hugo -t cocoa
+        run: |
+          git submodule init
+          git submodule update
+          hugo -t cocoa
 
       - name: Deploy
         run: |
@@ -51,8 +54,8 @@ jobs:
           echo "$access_key" > ~/.ssh/id_rsa
           chmod 0400 ~/.ssh/id_rsa
           cd public
-          git config --global user.email "luke@cloudcaptain.co"
-          git config --global user.name "Luke Griffith"
+          git config --global user.email "lukemgriffith@gmail.com"
+          git config --global user.name "lukegriffith"
           git add -A
           git commit -m "website update"
           git push website master
