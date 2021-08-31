@@ -3,7 +3,7 @@
 	url = git@github.com:budparr/gohugo-theme-ananke.git
 [submodule "themes/cocoa"]
 	path = themes/cocoa
-	url = git@github.com:nishanths/cocoa-hugo-theme.git
+	url = git@github.com:lukegriffith/cocoa-hugo-theme.git
 [submodule "public"]
 	path = public
 	url = git@github.com:lukemgriffith/lukemgriffith.github.io
