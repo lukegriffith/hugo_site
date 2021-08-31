@@ -18,19 +18,19 @@ blog  = "blog/:slug/"
 
 [[menu.main]]
 name                   = "blog"
-weight                 = -120
+weight                 = -100
 identifier             = "blog"
 url                    = "/blog/"
 
 [[menu.main]]
 name                   = "About"
-weight                 = -110
+weight                 = -120
 identifier             = "about"
 url                    = "/about/"
 
 [[menu.main]]
 name                   = "Projects"
-weight                 = -100
+weight                 = -110
 identifier             = "projects"
 url                    = "/projects/"
 
