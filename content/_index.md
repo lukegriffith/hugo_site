@@ -4,8 +4,7 @@ date: 2020-09-08T22:33:00
 draft: false
 ---
 
-# Site Reliability Engineer
-## No. 1 Fan of Automation
+# The Highlights
 
 * 12+ years of industry experience. 
 * First Class, BSc (Hons) Computing [Birkbeck, University of London](http://www.bbk.ac.uk/) _2016 to 2020_
