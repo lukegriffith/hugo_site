@@ -13,6 +13,17 @@ pygmentsuseclasses  = true
 pluralizelisttitles = false
 #googleAnalytics     = "UA-123-45"
 
+
+
+
+#[module]
+#[[module.imports]]
+#path = 'https://lukegriffith/cocoa-hugo-theme.git'
+
+
+
+
+
 [permalinks]
 blog  = "blog/:slug/"
 
