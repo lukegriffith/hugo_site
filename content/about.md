@@ -11,7 +11,7 @@ Luke is a passionate and highly focused individual, dedicated to learning about 
 is infrastructure automation, configuration and testing
 with experience in software engineering. He has experience leading small DevOps/SRE teams using agile methods. 
 
-He has worked indeph in both Linux and Windows environments, with recent focus being on Kubernetes and containerisation running on Linux. He has experience building end to end automation pipelines, with a number of CI/CD tools and has implemented piplines to do a variety of tasks from bootstrapping local servers with PXE to configuring cloud images with Packer and deployment of immutable systems with Terraform. Expter at utilizing GitOps workflows to integrate classic ITSM change management processes into modern infrastructure systems.
+He has worked indeph in both Linux and Windows environments, with recent focus being on Kubernetes and containerisation running on Linux. He has experience building end to end automation pipelines, with a number of CI/CD tools and has implemented pipelines to do a variety of tasks from bootstrapping local servers with PXE to configuring cloud images with Packer and deployment of immutable systems with Terraform. Expert at utilizing GitOps workflows to integrate classic ITSM change management processes into modern infrastructure systems.
 
 He has a keen interest in software development, CI/CD, reusable software design and enjoys building platforms and designing frameworks.
 
@@ -19,7 +19,7 @@ He has a keen interest in software development, CI/CD, reusable software design 
 
 Production experience maturing and developing Duco's Infrastructure as Code pipelines for the organizations cloud computing platform based on Kubernetes. Role entails many hats including with a range of responsibilities across development and operations.
 
-My main focus within the role has been setting up a mature and stable infrastructure as code delivery pipeline, and the hygiene of the cloud environments ensuring change processes accommodate the companies SOC2 and ISO27001 accreditations and keeping the process documented and accessible to ease onboarding of engineers onto the cloud environment. 
+My main focus within the role has been setting up a mature and stable infrastructure as code delivery pipeline, and the hygiene of the cloud environments ensuring change processes accommodate the companies SOC2 and ISO27001 accreditation's and keeping the process documented and accessible to ease on-boarding of engineers onto the cloud environment. 
  
 The role initially started as a focused delivery of infrastructure capabilities, leading me to become the company's SME on all things cloud infrastructure. The role has now changed into a managerial one where I lead a team of 4 to maintain the platform. 
  
@@ -86,7 +86,7 @@ Here is a subset of the modules I've found most interesting:
 
 - Software Programming.
 - Algorithm Design.
-- Computer organisation and system architecture
+- Computer organization and system architecture
 - Machine learning concepts. 
 
 ### Languages
