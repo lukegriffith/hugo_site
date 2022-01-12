@@ -36,8 +36,6 @@ Touching the following technologies daily:
 - Prometheus & AlertManager
 - Portworx
 
-Additionally using Golang to simplify automation solutions for the company, contributing to open source projects, mainly Terraform providers and upstream libraries.
-
 ## Cloud Engineer @ G-Research (2018 - 2019)
 
 Working on public and private cloud adoption throughout the business. Works daily with Terraform, Ansible, Python and golang working on AWS and Openstack platforms. GitHub is the primary VCS system with Jenkins, Ansible Tower, and Terraform Enterprise used to deliver ci/cd workflows. 
