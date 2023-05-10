@@ -60,4 +60,3 @@ jobs:
           rm ~/.ssh/id_rsa
         env:
           access_key: ${{ secrets.GITHUB_TOKEN }}
-
