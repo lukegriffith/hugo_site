@@ -28,11 +28,17 @@ jobs:
 
       - name: Setup Public
         run: |
+          mkdir -p ~/.ssh
           mkdir -p public
+          echo "$access_key" > ~/.ssh/id_rsa
+          chmod 0400 ~/.ssh/id_rsa
           cd public
           git init
-          git remote add website https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/lukegriffith/lukemgriffith.github.io.git
+          git remote add website git@github.com:lukemgriffith/lukemgriffith.github.io.git
           git pull website master
+          rm ~/.ssh/id_rsa
+        env:
+          access_key: ${{ secrets.REPO_ACCESS }}
 
 
       - name: Build
@@ -41,11 +47,17 @@ jobs:
 
       - name: Deploy
         run: |
-          # mkdir -p public
+          mkdir -p ~/.ssh
+          mkdir -p public
+          echo "$access_key" > ~/.ssh/id_rsa
+          chmod 0400 ~/.ssh/id_rsa
           cd public
           git config --global user.email "lukemgriffith@gmail.com"
           git config --global user.name "lukegriffith"
-          # git remote add website https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/lukegriffith/lukemgriffith.github.io.git
           git add -A
           git commit -m "website update"
           git push website master
+          rm ~/.ssh/id_rsa
+        env:
+          access_key: ${{ secrets.REPO_ACCESS }}
+
