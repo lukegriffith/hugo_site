@@ -41,11 +41,11 @@ jobs:
 
       - name: Deploy
         run: |
-          mkdir -p public
+          # mkdir -p public
           cd public
-          git config --global user.email "lukemgriffith@gmail.com"
-          git config --global user.name "lukegriffith"
-          git remote add website https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/lukegriffith/lukemgriffith.github.io.git
+          # git config --global user.email "lukemgriffith@gmail.com"
+          # git config --global user.name "lukegriffith"
+          # git remote add website https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/lukegriffith/lukemgriffith.github.io.git
           git add -A
           git commit -m "website update"
           git push website master
