@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Macos Tmux copy and paste setup, post 2019 | Luke Griffith</title>
+<meta name="keywords" content="">
+<meta name="description" content="Hello blog, it&rsquo;s been a minute - 4 years. You&rsquo;ve been good? &hellip; I mean I know you have, I&rsquo;ve replatformed you 3 times and added no content. Me? Oh, nothing much… I&rsquo;ve only got tmux copy and paste to work on MacOS!
+Why is this big, well the last 5 years I&rsquo;ve come to work on a new macbook exactly twice - I find this blog post explaining how to setup copy and paste in a macos world by somebody named Chris Toomey - Indeed the future would be better, Chris if this wasn&rsquo;t the first hit on google and wasn’t written in 2013.">
+<meta name="author" content="Luke Griffith">
+<link rel="canonical" href="https://lukegriffith.co.uk/blog/macos-tmux-copy-and-paste-setup-post-2019/">
+<link crossorigin="anonymous" href="https://lukegriffith.co.uk/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://lukegriffith.co.uk/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://lukegriffith.co.uk/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://lukegriffith.co.uk/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://lukegriffith.co.uk/apple-touch-icon.png">
+<link rel="mask-icon" href="https://lukegriffith.co.uk/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Macos Tmux copy and paste setup, post 2019" />
+<meta property="og:description" content="Hello blog, it&rsquo;s been a minute - 4 years. You&rsquo;ve been good? &hellip; I mean I know you have, I&rsquo;ve replatformed you 3 times and added no content. Me? Oh, nothing much… I&rsquo;ve only got tmux copy and paste to work on MacOS!
+Why is this big, well the last 5 years I&rsquo;ve come to work on a new macbook exactly twice - I find this blog post explaining how to setup copy and paste in a macos world by somebody named Chris Toomey - Indeed the future would be better, Chris if this wasn&rsquo;t the first hit on google and wasn’t written in 2013." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lukegriffith.co.uk/blog/macos-tmux-copy-and-paste-setup-post-2019/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2022-01-12T19:00:00+00:00" />
+<meta property="article:modified_time" content="2022-01-12T19:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Macos Tmux copy and paste setup, post 2019"/>
+<meta name="twitter:description" content="Hello blog, it&rsquo;s been a minute - 4 years. You&rsquo;ve been good? &hellip; I mean I know you have, I&rsquo;ve replatformed you 3 times and added no content. Me? Oh, nothing much… I&rsquo;ve only got tmux copy and paste to work on MacOS!
+Why is this big, well the last 5 years I&rsquo;ve come to work on a new macbook exactly twice - I find this blog post explaining how to setup copy and paste in a macos world by somebody named Chris Toomey - Indeed the future would be better, Chris if this wasn&rsquo;t the first hit on google and wasn’t written in 2013."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blog",
+      "item": "https://lukegriffith.co.uk/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Macos Tmux copy and paste setup, post 2019",
+      "item": "https://lukegriffith.co.uk/blog/macos-tmux-copy-and-paste-setup-post-2019/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Macos Tmux copy and paste setup, post 2019",
+  "name": "Macos Tmux copy and paste setup, post 2019",
+  "description": "Hello blog, it\u0026rsquo;s been a minute - 4 years. You\u0026rsquo;ve been good? \u0026hellip; I mean I know you have, I\u0026rsquo;ve replatformed you 3 times and added no content. Me? Oh, nothing much… I\u0026rsquo;ve only got tmux copy and paste to work on MacOS!\nWhy is this big, well the last 5 years I\u0026rsquo;ve come to work on a new macbook exactly twice - I find this blog post explaining how to setup copy and paste in a macos world by somebody named Chris Toomey - Indeed the future would be better, Chris if this wasn\u0026rsquo;t the first hit on google and wasn’t written in 2013.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Hello blog, it’s been a minute - 4 years. You’ve been good? … I mean I know you have, I’ve replatformed you 3 times and added no content. Me? Oh, nothing much… I’ve only got tmux copy and paste to work on MacOS!\nWhy is this big, well the last 5 years I’ve come to work on a new macbook exactly twice - I find this blog post explaining how to setup copy and paste in a macos world by somebody named Chris Toomey - Indeed the future would be better, Chris if this wasn’t the first hit on google and wasn’t written in 2013. The future has moved on (oh boy it moved on 😷) and tmux has moved on.\nIf you brew install tmux and the reattach-to-user-namespace package, then you add the config documented on the linked blog in your .tmux.conf it wont load. If you manually source it Ctrl + B, :source-file ~/.tmux.conf it’ll spit out something along the lines of\n/home/user/.tmux.conf:12: usage: bind-key [-cnr] [-T key-table] key command [arguments] This is on a tmux version greater than 3.0.\nAt this point previously, I looked for another article and was unable to find the answer - reasoned with myself is tmux really worth it and moved on with my life. I installed iterm, learnt some hotkeys and got on with my multiplexless life.\nBut this time was different, this time - I had time. My age old enemy, well now it has become my friend.\nIt doesn’t work because the command syntax changed, I’m unsure what version - if I cared more I would check, but alas.\nsetw -g mode-keys vi bind-key -T copy-mode-vi v send-keys -X begin-selection unbind -T copy-mode-vi Enter bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel 'reattach-to-user-namespace pbcopy' bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'reattach-to-user-namespace pbcopy' The above added to my tmux config, after installing reattach-to-user-namespace actually worked, I can move into selection mode - smash Y and copy into the system clipboard. All it took was some patience and reading man pages. If I had just taken the literal 5 minutes of using my brain before to help myself out!\nIf there’s some solace, hopfully this supassess Chris’ blog post on Google and saves someone some time. But that would involve me actually having a sensible adsense setup.\nIn another four years!\nSayonara\n",
+  "wordCount" : "391",
+  "inLanguage": "en",
+  "datePublished": "2022-01-12T19:00:00Z",
+  "dateModified": "2022-01-12T19:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Luke Griffith"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://lukegriffith.co.uk/blog/macos-tmux-copy-and-paste-setup-post-2019/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Luke Griffith",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://lukegriffith.co.uk/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://lukegriffith.co.uk/" accesskey="h" title="Luke Griffith (Alt + H)">Luke Griffith</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://lukegriffith.co.uk/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://lukegriffith.co.uk/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://lukegriffith.co.uk/blog/" title="blog">
+                    <span>blog</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Macos Tmux copy and paste setup, post 2019
+    </h1>
+    <div class="post-meta"><span title='2022-01-12 19:00:00 +0000 GMT'>January 12, 2022</span>&nbsp;·&nbsp;Luke Griffith
+
+</div>
+  </header> 
+  <div class="post-content"><p>Hello blog, it&rsquo;s been a minute - 4 years. You&rsquo;ve been good? &hellip; I mean I know you have, I&rsquo;ve replatformed you 3 times and added no content. Me? Oh, nothing much… I&rsquo;ve only got tmux copy and paste to work on MacOS!</p>
+<p>Why is this big, well the last 5 years I&rsquo;ve come to work on a new macbook exactly twice - I find <a href="https://thoughtbot.com/blog/tmux-copy-paste-on-os-x-a-better-future">this blog post</a> explaining how to setup copy and paste in a macos world by somebody named Chris Toomey - Indeed the future would be better, Chris if this wasn&rsquo;t the first hit on google and wasn’t written in 2013. The future has moved on (oh boy it moved on 😷) and tmux has moved on.</p>
+<p>If you brew install <code>tmux</code> and the <code>reattach-to-user-namespace</code> package, then you add the config documented on the linked blog in your .tmux.conf it wont load. If you manually source it <code>Ctrl + B, :source-file ~/.tmux.conf</code> it&rsquo;ll spit out something along the lines of</p>
+<pre tabindex="0"><code>/home/user/.tmux.conf:12: usage: bind-key [-cnr] [-T key-table] key command [arguments]
+</code></pre><p>This is on a tmux version greater than 3.0.</p>
+<p>At this point previously, I looked for another article and was unable to find the  answer - reasoned with myself is tmux really worth it and moved on with my life. I installed iterm, learnt some hotkeys and got on with my multiplexless life.</p>
+<p>But this time was different, this time - I had time. My age old enemy, well now it has become my friend.</p>
+<p>It doesn&rsquo;t work because the command syntax changed, I&rsquo;m unsure what version - if I cared more I would check, but alas.</p>
+<pre tabindex="0"><code>setw -g mode-keys vi
+bind-key -T copy-mode-vi v send-keys -X begin-selection
+unbind -T copy-mode-vi Enter
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel &#39;reattach-to-user-namespace pbcopy&#39;
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel &#39;reattach-to-user-namespace pbcopy&#39;
+</code></pre><p>The above added to my tmux config, after installing <code>reattach-to-user-namespace</code> actually worked, I can move into selection mode - smash Y and copy into the system clipboard. All it took was some patience and reading man pages. If I had just taken the literal 5 minutes of using my brain before to help myself out!</p>
+<p>If there&rsquo;s some solace, hopfully this supassess Chris&rsquo; blog post on Google and saves someone some time. But that would involve me actually having a sensible adsense setup.</p>
+<p>In another four years!</p>
+<p>Sayonara</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://lukegriffith.co.uk/">Luke Griffith</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

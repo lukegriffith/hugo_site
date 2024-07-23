@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Custom function and property attributes | Luke Griffith</title>
+<meta name="keywords" content="">
+<meta name="description" content="Why do you want this? These decorations can be added to powershell elements to provide more information via reflection to outside frameworks, allowing for more modular and extensible module design.
+Property attributes These can be applied to properties of classes to give extra meaning to it, effectively adding meta data. This meta data can be used by PowerShell developers to utilize framework instructions when working with an application. This type of scenario might come when you&rsquo;re wanting to map class properties to API queries.">
+<meta name="author" content="Luke Griffith">
+<link rel="canonical" href="https://lukegriffith.co.uk/blog/custom-function-and-property-attributes/">
+<link crossorigin="anonymous" href="https://lukegriffith.co.uk/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://lukegriffith.co.uk/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://lukegriffith.co.uk/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://lukegriffith.co.uk/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://lukegriffith.co.uk/apple-touch-icon.png">
+<link rel="mask-icon" href="https://lukegriffith.co.uk/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Custom function and property attributes" />
+<meta property="og:description" content="Why do you want this? These decorations can be added to powershell elements to provide more information via reflection to outside frameworks, allowing for more modular and extensible module design.
+Property attributes These can be applied to properties of classes to give extra meaning to it, effectively adding meta data. This meta data can be used by PowerShell developers to utilize framework instructions when working with an application. This type of scenario might come when you&rsquo;re wanting to map class properties to API queries." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lukegriffith.co.uk/blog/custom-function-and-property-attributes/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2017-01-23T22:00:21+00:00" />
+<meta property="article:modified_time" content="2017-01-23T22:00:21+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Custom function and property attributes"/>
+<meta name="twitter:description" content="Why do you want this? These decorations can be added to powershell elements to provide more information via reflection to outside frameworks, allowing for more modular and extensible module design.
+Property attributes These can be applied to properties of classes to give extra meaning to it, effectively adding meta data. This meta data can be used by PowerShell developers to utilize framework instructions when working with an application. This type of scenario might come when you&rsquo;re wanting to map class properties to API queries."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blog",
+      "item": "https://lukegriffith.co.uk/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Custom function and property attributes",
+      "item": "https://lukegriffith.co.uk/blog/custom-function-and-property-attributes/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Custom function and property attributes",
+  "name": "Custom function and property attributes",
+  "description": "Why do you want this? These decorations can be added to powershell elements to provide more information via reflection to outside frameworks, allowing for more modular and extensible module design.\nProperty attributes These can be applied to properties of classes to give extra meaning to it, effectively adding meta data. This meta data can be used by PowerShell developers to utilize framework instructions when working with an application. This type of scenario might come when you\u0026rsquo;re wanting to map class properties to API queries.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Why do you want this? These decorations can be added to powershell elements to provide more information via reflection to outside frameworks, allowing for more modular and extensible module design.\nProperty attributes These can be applied to properties of classes to give extra meaning to it, effectively adding meta data. This meta data can be used by PowerShell developers to utilize framework instructions when working with an application. This type of scenario might come when you’re wanting to map class properties to API queries.\n\u003c# .Notes Created: 23/01/2017 Author: Luke Griffith .Synopsis Creates a property attribute that can be mapped to class properties. .Description apiObject informs the Mapper that this property is a member of the API and should be mapped accordingly. .Example class Software { [apiObject(shouldQuery=$true)] [String]$Name ... #\u003e class apiObject : System.Attribute { [bool]$shouldQuery } Above we’ve defined the apiObject, inheriting from the System.Attribute class it inherits the required functionality to make this class an attribute. Now I can use the class to add metadata to properties.\nclass Software { [apiObject(shouldQuery=$true)] [String]$Name Software([apiMapper]$mapper){ } } Now we can create a software class, and add the attribute to any property. We can reflect on the property to obtain the named arguments.\n[Software].GetProperties().Where{$_.Name -eq \"Name\"} Function attributes These can be added to powershell functions, just like the [CmdletBinding()] class. These can be pulled back from the FunctionInfo object.\n# enum for class options enum httpMethods { GET PUT POST DELETE } \u003c# .Notes Luke Griffith 23/01/17 .Synopsis Function attribute that interfaces with WebModule .Description Can be used to add WebModule properties like route, and method. #\u003e class Web : System.Management.Automation.CmdletCommonMetadataAttribute { [httpMethods]$Method [string]$Route Web(){ } } \u003c# .Notes Luke Griffith 23/01/17 .Synopsis Obtains host data from the config database registry. .Description Using the ConfigDB module, it queries the registry for the computer name provided. #\u003e function Get-HostData { [Web(Method=\"GET\", Route=\"api/hosts\")] param( [String]$ComputerName ) Get-ConfigDBItem $ComputerName } In the above example, I’ve coded out a Web function attribute and this can be added to the function much like the CmdletBinding attribute. In this case, the attributes provide a web framework data around the HTML route for this function to be called at, and what method it takes.\nTo obtain this metadata, I just need to get the FunctionInfo.\n$function = Get-Command Get-HostData $function.ScriptBlock.Attributes # Method : GET # Route : api/hosts # DefaultParameterSetName : # SupportsShouldProcess : False # SupportsPaging : False # SupportsTransactions : False # ConfirmImpact : Medium # HelpUri : # RemotingCapability : PowerShell # TypeId : Web ",
+  "wordCount" : "420",
+  "inLanguage": "en",
+  "datePublished": "2017-01-23T22:00:21Z",
+  "dateModified": "2017-01-23T22:00:21Z",
+  "author":{
+    "@type": "Person",
+    "name": "Luke Griffith"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://lukegriffith.co.uk/blog/custom-function-and-property-attributes/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Luke Griffith",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://lukegriffith.co.uk/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://lukegriffith.co.uk/" accesskey="h" title="Luke Griffith (Alt + H)">Luke Griffith</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://lukegriffith.co.uk/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://lukegriffith.co.uk/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://lukegriffith.co.uk/blog/" title="blog">
+                    <span>blog</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Custom function and property attributes
+    </h1>
+    <div class="post-meta"><span title='2017-01-23 22:00:21 +0000 GMT'>January 23, 2017</span>&nbsp;·&nbsp;Luke Griffith
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="why-do-you-want-this">Why do you want this?<a hidden class="anchor" aria-hidden="true" href="#why-do-you-want-this">#</a></h1>
+<p>These decorations can be added to powershell elements to provide more information via reflection to outside frameworks, allowing for more modular and extensible module design.</p>
+<h1 id="property-attributes">Property attributes<a hidden class="anchor" aria-hidden="true" href="#property-attributes">#</a></h1>
+<p>These can be applied to properties of classes to give extra meaning to it, effectively adding meta data. This meta data can be used by PowerShell developers to utilize framework instructions when working with an application.
+This type of scenario might come when you&rsquo;re wanting to map class properties to API queries.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">&lt;#
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Notes</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">        Created: 23/01/2017 
+</span></span></span><span class="line"><span class="cl"><span class="cm">        Author: Luke Griffith
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Synopsis</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">        Creates a property attribute that can be mapped to class properties.
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Description</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">        apiObject informs the Mapper that this property is a member 
+</span></span></span><span class="line"><span class="cl"><span class="cm">        of the API and should be mapped accordingly.
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Example</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">        class Software {
+</span></span></span><span class="line"><span class="cl"><span class="cm">            [apiObject(shouldQuery=$true)]
+</span></span></span><span class="line"><span class="cl"><span class="cm">            [String]$Name   
+</span></span></span><span class="line"><span class="cl"><span class="cm">            ...
+</span></span></span><span class="line"><span class="cl"><span class="cm">    
+</span></span></span><span class="line"><span class="cl"><span class="cm">#&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">class</span><span class="w"> </span><span class="nb">apiObject :</span> <span class="n">System</span><span class="p">.</span><span class="py">Attribute</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">bool</span><span class="p">]</span><span class="nv">$shouldQuery</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Above we&rsquo;ve defined the apiObject, inheriting from the System.Attribute class it inherits the required functionality to make this class an attribute.
+Now I can use the class to add metadata to properties.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">class</span><span class="w"> </span><span class="nb">Software </span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">apiObject</span><span class="p">(</span><span class="n">shouldQuery</span><span class="p">=</span><span class="vm">$true</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">String</span><span class="p">]</span><span class="nv">$Name</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Software</span><span class="p">([</span><span class="no">apiMapper</span><span class="p">]</span><span class="nv">$mapper</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Now we can create a software class, and add the attribute to any property. We can reflect on the property to obtain the named arguments.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="no">Software</span><span class="p">].</span><span class="py">GetProperties</span><span class="p">().</span><span class="py">Where</span><span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="py">Name</span> <span class="o">-eq</span> <span class="s2">&#34;Name&#34;</span><span class="p">}</span>
+</span></span></code></pre></div><h1 id="function-attributes">Function attributes<a hidden class="anchor" aria-hidden="true" href="#function-attributes">#</a></h1>
+<p>These can be added to powershell functions, just like the [CmdletBinding()] class. These can be pulled back from the FunctionInfo object.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># enum for class options</span>
+</span></span><span class="line"><span class="cl"><span class="n">enum</span> <span class="n">httpMethods</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">GET</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PUT</span>
+</span></span><span class="line"><span class="cl">    <span class="n">POST</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DELETE</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">&lt;#
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Notes</span><span class="cm"> 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Luke Griffith
+</span></span></span><span class="line"><span class="cl"><span class="cm">    23/01/17
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Synopsis</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Function attribute that interfaces with WebModule
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Description</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Can be used to add WebModule properties like route, and method.
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">#&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">class</span><span class="w"> </span><span class="nb">Web :</span> <span class="n">System</span><span class="p">.</span><span class="py">Management</span><span class="p">.</span><span class="py">Automation</span><span class="p">.</span><span class="py">CmdletCommonMetadataAttribute</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">httpMethods</span><span class="p">]</span><span class="nv">$Method</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">string</span><span class="p">]</span><span class="nv">$Route</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Web</span><span class="p">(){</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">&lt;#
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Notes</span><span class="cm"> 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Luke Griffith
+</span></span></span><span class="line"><span class="cl"><span class="cm">    23/01/17
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Synopsis</span><span class="cm"> 
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Obtains host data from the config database registry.
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    .</span><span class="sd">Description</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Using the ConfigDB module, it queries the registry for the computer name provided.
+</span></span></span><span class="line"><span class="cl"><span class="cm">#&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">function</span><span class="w"> </span><span class="nb">Get-HostData</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">Web</span><span class="p">(</span><span class="n">Method</span><span class="p">=</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span> <span class="n">Route</span><span class="p">=</span><span class="s2">&#34;api/hosts&#34;</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">param</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">[</span><span class="no">String</span><span class="p">]</span><span class="nv">$ComputerName</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">Get-ConfigDBItem</span> <span class="nv">$ComputerName</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>In the above example, I&rsquo;ve coded out a Web function attribute and this can be added to the function much like the CmdletBinding attribute.
+In this case, the attributes provide a web framework data around the HTML route for this function to be called at, and what method it takes.</p>
+<p>To obtain this metadata, I just need to get the FunctionInfo.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl"><span class="nv">$function</span> <span class="p">=</span> <span class="nb">Get-Command</span> <span class="nb">Get-HostData</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$function</span><span class="p">.</span><span class="py">ScriptBlock</span><span class="p">.</span><span class="py">Attributes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># Method                  : GET</span>
+</span></span><span class="line"><span class="cl"><span class="c"># Route                   : api/hosts</span>
+</span></span><span class="line"><span class="cl"><span class="c"># DefaultParameterSetName : </span>
+</span></span><span class="line"><span class="cl"><span class="c"># SupportsShouldProcess   : False</span>
+</span></span><span class="line"><span class="cl"><span class="c"># SupportsPaging          : False</span>
+</span></span><span class="line"><span class="cl"><span class="c"># SupportsTransactions    : False</span>
+</span></span><span class="line"><span class="cl"><span class="c"># ConfirmImpact           : Medium</span>
+</span></span><span class="line"><span class="cl"><span class="c"># HelpUri                 : </span>
+</span></span><span class="line"><span class="cl"><span class="c"># RemotingCapability      : PowerShell</span>
+</span></span><span class="line"><span class="cl"><span class="c"># TypeId                  : Web</span>
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://lukegriffith.co.uk/">Luke Griffith</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

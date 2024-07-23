@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>VPC Flow Log Woes | Luke Griffith</title>
+<meta name="keywords" content="">
+<meta name="description" content="I believe I&rsquo;ve identified a bug where the VPCFlowLogs verbs in ec2, create, describe and delete do not work when a source IP condition is applied against the policy.
+I&rsquo;ve replicated the problem in this terraform module. At line 79 in main.tf is the role policy attachment that is currently attaching flow_test_policy. This is the IAM policy with the source IP condition in, if used all EC2 actions can be completed except any of the VPC flow actions and can be replicated via the console by navigating to VPC &gt; Your VPCs &gt; Select VPC main &gt; Flow Logs">
+<meta name="author" content="Luke Griffith">
+<link rel="canonical" href="https://lukegriffith.co.uk/blog/vpc-flow-log-woes/">
+<link crossorigin="anonymous" href="https://lukegriffith.co.uk/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://lukegriffith.co.uk/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://lukegriffith.co.uk/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://lukegriffith.co.uk/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://lukegriffith.co.uk/apple-touch-icon.png">
+<link rel="mask-icon" href="https://lukegriffith.co.uk/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="VPC Flow Log Woes" />
+<meta property="og:description" content="I believe I&rsquo;ve identified a bug where the VPCFlowLogs verbs in ec2, create, describe and delete do not work when a source IP condition is applied against the policy.
+I&rsquo;ve replicated the problem in this terraform module. At line 79 in main.tf is the role policy attachment that is currently attaching flow_test_policy. This is the IAM policy with the source IP condition in, if used all EC2 actions can be completed except any of the VPC flow actions and can be replicated via the console by navigating to VPC &gt; Your VPCs &gt; Select VPC main &gt; Flow Logs" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lukegriffith.co.uk/blog/vpc-flow-log-woes/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2018-05-09T23:31:57+01:00" />
+<meta property="article:modified_time" content="2018-05-09T23:31:57+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="VPC Flow Log Woes"/>
+<meta name="twitter:description" content="I believe I&rsquo;ve identified a bug where the VPCFlowLogs verbs in ec2, create, describe and delete do not work when a source IP condition is applied against the policy.
+I&rsquo;ve replicated the problem in this terraform module. At line 79 in main.tf is the role policy attachment that is currently attaching flow_test_policy. This is the IAM policy with the source IP condition in, if used all EC2 actions can be completed except any of the VPC flow actions and can be replicated via the console by navigating to VPC &gt; Your VPCs &gt; Select VPC main &gt; Flow Logs"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blog",
+      "item": "https://lukegriffith.co.uk/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "VPC Flow Log Woes",
+      "item": "https://lukegriffith.co.uk/blog/vpc-flow-log-woes/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "VPC Flow Log Woes",
+  "name": "VPC Flow Log Woes",
+  "description": "I believe I\u0026rsquo;ve identified a bug where the VPCFlowLogs verbs in ec2, create, describe and delete do not work when a source IP condition is applied against the policy.\nI\u0026rsquo;ve replicated the problem in this terraform module. At line 79 in main.tf is the role policy attachment that is currently attaching flow_test_policy. This is the IAM policy with the source IP condition in, if used all EC2 actions can be completed except any of the VPC flow actions and can be replicated via the console by navigating to VPC \u0026gt; Your VPCs \u0026gt; Select VPC main \u0026gt; Flow Logs",
+  "keywords": [
+    
+  ],
+  "articleBody": "I believe I’ve identified a bug where the VPCFlowLogs verbs in ec2, create, describe and delete do not work when a source IP condition is applied against the policy.\nI’ve replicated the problem in this terraform module. At line 79 in main.tf is the role policy attachment that is currently attaching flow_test_policy. This is the IAM policy with the source IP condition in, if used all EC2 actions can be completed except any of the VPC flow actions and can be replicated via the console by navigating to VPC \u003e Your VPCs \u003e Select VPC main \u003e Flow Logs\nAn error will appear saying you’re not authorized to perform this operation. AWS knows who I am, but doesn’t believe I am authorized. yet I can list VPC’s as the policy states, under the source IP condition.\nThe current configuration\nresource \"aws_iam_role_policy_attachment\" \"flow_test_attach\" { role = \"${aws_iam_role.test_role.name}\" policy_arn = \"${aws_iam_policy.flow_test_policy.arn}\" } When attaching flow_test_policy1 on line 79 and the source IP condition is removed, I am able to describe flow logs and also create and delete them attached to the VPC. This can easily be tested by selecting Create Flow Log under the same view and selecting vpc_flow_role under the Role, and main_vpc_log_group as the Destination log group.\nExample of the change to attach flow_test_policy1\nresource \"aws_iam_role_policy_attachment\" \"flow_test_attach\" { role = \"${aws_iam_role.test_role.name}\" policy_arn = \"${aws_iam_policy.flow_test_policy1.arn}\" } Extra Note\nThis also occurs when a policy, without source IP filtering is applied over the top just for the VPC Flow Logs, what makes me think the creation of the flow log requires more than just ec2:CreateFlowLogs\n",
+  "wordCount" : "263",
+  "inLanguage": "en",
+  "datePublished": "2018-05-09T23:31:57+01:00",
+  "dateModified": "2018-05-09T23:31:57+01:00",
+  "author":{
+    "@type": "Person",
+    "name": "Luke Griffith"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://lukegriffith.co.uk/blog/vpc-flow-log-woes/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Luke Griffith",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://lukegriffith.co.uk/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://lukegriffith.co.uk/" accesskey="h" title="Luke Griffith (Alt + H)">Luke Griffith</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://lukegriffith.co.uk/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://lukegriffith.co.uk/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://lukegriffith.co.uk/blog/" title="blog">
+                    <span>blog</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      VPC Flow Log Woes
+    </h1>
+    <div class="post-meta"><span title='2018-05-09 23:31:57 +0100 BST'>May 9, 2018</span>&nbsp;·&nbsp;Luke Griffith
+
+</div>
+  </header> 
+  <div class="post-content"><p>I believe I&rsquo;ve identified a bug where the VPCFlowLogs verbs in ec2, create, describe and delete do not work when a source IP condition is applied against the policy.</p>
+<p>I&rsquo;ve replicated the problem in <a href="https://github.com/lukemgriffith/aws-dev/tree/master/VPCFlowLogsBug">this terraform module</a>. At line 79 in main.tf is the role policy attachment that is currently attaching flow_test_policy. This is the IAM policy with the source IP condition in, if used all EC2 actions can be completed except any of the VPC flow actions and can be replicated via the console by navigating to VPC &gt; Your VPCs &gt; Select VPC main &gt; Flow Logs</p>
+<p>An error will appear saying you&rsquo;re not authorized to perform this operation. AWS knows who I am, but doesn&rsquo;t believe I am authorized. yet I can list VPC&rsquo;s as the policy states, under the source IP condition.</p>
+<p><em>The current configuration</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">resource</span> <span class="s2">&#34;aws_iam_role_policy_attachment&#34; &#34;flow_test_attach&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    role</span>       <span class="o">=</span> <span class="s2">&#34;${aws_iam_role.test_role.name}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">    policy_arn</span> <span class="o">=</span> <span class="s2">&#34;${aws_iam_policy.flow_test_policy.arn}&#34;</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>When attaching flow_test_policy1 on line 79 and the source IP condition is removed, I am able to describe flow logs and also create and delete them attached to the VPC. This can easily be tested by selecting Create Flow Log under the same view and selecting vpc_flow_role under the Role, and main_vpc_log_group as the Destination log group.</p>
+<p><em>Example of the change to attach flow_test_policy1</em></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-hcl" data-lang="hcl"><span class="line"><span class="cl"><span class="k">resource</span> <span class="s2">&#34;aws_iam_role_policy_attachment&#34; &#34;flow_test_attach&#34;</span> {
+</span></span><span class="line"><span class="cl"><span class="n">    role</span>       <span class="o">=</span> <span class="s2">&#34;${aws_iam_role.test_role.name}&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">    policy_arn</span> <span class="o">=</span> <span class="s2">&#34;${aws_iam_policy.flow_test_policy1.arn}&#34;</span>
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p><em>Extra Note</em></p>
+<p>This also occurs when a policy, without source IP filtering is applied over the top just for the VPC Flow Logs, what makes me think the creation of the flow log requires more than just ec2:CreateFlowLogs</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://lukegriffith.co.uk/">Luke Griffith</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

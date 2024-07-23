@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Inheritance in PowerShell DSC resources | Luke Griffith</title>
+<meta name="keywords" content="">
+<meta name="description" content="Intro Last week i made a blog post about the DSC framework and its limitations, I can now withdraw that statement. for me it was a learning experience and taught me to always test on multiple versions and operating systems before you come to a theory.
+This post is to show an example of how to use the DSC framework in a better way, to hopefully reduce code smells and reduce repetitive code use, keeping close to agile principles.">
+<meta name="author" content="Luke Griffith">
+<link rel="canonical" href="https://lukegriffith.co.uk/blog/inheritance-in-powershell-dsc-resources/">
+<link crossorigin="anonymous" href="https://lukegriffith.co.uk/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://lukegriffith.co.uk/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://lukegriffith.co.uk/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://lukegriffith.co.uk/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://lukegriffith.co.uk/apple-touch-icon.png">
+<link rel="mask-icon" href="https://lukegriffith.co.uk/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Inheritance in PowerShell DSC resources" />
+<meta property="og:description" content="Intro Last week i made a blog post about the DSC framework and its limitations, I can now withdraw that statement. for me it was a learning experience and taught me to always test on multiple versions and operating systems before you come to a theory.
+This post is to show an example of how to use the DSC framework in a better way, to hopefully reduce code smells and reduce repetitive code use, keeping close to agile principles." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lukegriffith.co.uk/blog/inheritance-in-powershell-dsc-resources/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2016-06-16T20:00:21+01:00" />
+<meta property="article:modified_time" content="2016-06-16T20:00:21+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Inheritance in PowerShell DSC resources"/>
+<meta name="twitter:description" content="Intro Last week i made a blog post about the DSC framework and its limitations, I can now withdraw that statement. for me it was a learning experience and taught me to always test on multiple versions and operating systems before you come to a theory.
+This post is to show an example of how to use the DSC framework in a better way, to hopefully reduce code smells and reduce repetitive code use, keeping close to agile principles."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blog",
+      "item": "https://lukegriffith.co.uk/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Inheritance in PowerShell DSC resources",
+      "item": "https://lukegriffith.co.uk/blog/inheritance-in-powershell-dsc-resources/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Inheritance in PowerShell DSC resources",
+  "name": "Inheritance in PowerShell DSC resources",
+  "description": "Intro Last week i made a blog post about the DSC framework and its limitations, I can now withdraw that statement. for me it was a learning experience and taught me to always test on multiple versions and operating systems before you come to a theory.\nThis post is to show an example of how to use the DSC framework in a better way, to hopefully reduce code smells and reduce repetitive code use, keeping close to agile principles.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Intro Last week i made a blog post about the DSC framework and its limitations, I can now withdraw that statement. for me it was a learning experience and taught me to always test on multiple versions and operating systems before you come to a theory.\nThis post is to show an example of how to use the DSC framework in a better way, to hopefully reduce code smells and reduce repetitive code use, keeping close to agile principles. In the WMF 4 way of writing resources, many times i came across functions that I was using time and time again in different modules that had DSC resources.\nEventually I settled for a helper module that my resources depended on but due to the limitations of the WMF4 LCM and pull server - having a requirement of a module that was not already located on the box caused issues for the download manager as it could not validate the modules. After a number of hacks and effectively bending Powershell and DSC out of shape, I managed to get my helper module and use it as a central store for useful functions to be used across a number of DSC resources.\nNow on WMF 5, utilizing class based resources and inheritance I believe there is a better way to achieve this.\nDSC Inheritance GITHUB PROJECT LINK\nSee the above link to the GitHub project, I’ve used this as an example of how inheritance can be achieved in DSC, in this project you have the two Powershell modules\n-- Modules |-- Base |-- Base.psm1 |-- Base.psd1 |-- InheritedResource |-- InheritedResource.psm1 |-- InheritedResource.psd1 Having these modules located in the module path, will export a single DSC resource, InheritedResource and it has the following properties.\nPS wrk:\\\u003e Get-DscResource -Name InheritedResource | % Properties Name PropertyType IsMandatory Values ---- ------------ ----------- ------ Enforce [string] True {Always, Controlled, Never} Ensure [string] True {Absent, Present} SettingName [string] True {} DependsOn [string[]] False {} PsDscRunAsCredential [PSCredential] False {} If you look at the class for InheritedResource, not a lot is going on compared to what you might expect a standard DSC resource to have. A single property $SettingName is declared and made the Key of the resource, yet without a valid Get/Set/Test the resource is still valid and you can compile a mof, Furthermore the properties above Enforce and Ensure are no where to be seen.\nusing Module Base [DscResource()] class InheritedResource : Base { [DSCProperty(Key)] [String]$SettingName } How this is achieved is by inheriting form the base resource (See InheritedResource : Base), this ensures that InheritedResource has all the properties of base, unless they are overwritten by the child class. This allows me to inherit the Get, Set and Test method to effectively abstract away the inner workings of my resource, leaving only superficial settings available in the class.\nAbstract the Get / Set / Test First question is why would you want to do this? Well really you wouldn’t in this form, each resource really needs its own implementation of the Get, Set and Test because it needs to implement its own logic to configure what your resource is developed for. Where could this be helpful? well abstracting the implementation of the methods allows you more control over what happens inside the resource - Say for example base looked like this.\nusing Module Base [DscResource()] class Base { [Bool]$Enforce [Void]Set() { Start-Logger $ShouldRun = Get-EnforcementConfig $Enforce if ($ShouldRun) { $this.xSet() } } [Void]xSet() {} } With this implementation of the base resource, I would be able to override the xSet method on the inherited class and any Set that was triggered by the DSC framework would always go through this method before executing the inherited resource set.\nThe benefits this gives allows you to have a single point to trap logs, check if a set should run and other business logic that your configuration workflows might need, in this case the Inherited Resource might look something like this.\nclass InheritedResource : Base { [DSCProperty(Key)] [String]$SettingName [Void]xSet() { Set-SettingName $this.SettingName } } So the above inheritedResource Set method that DSC executes would first hit the Base Set method, execute the central logic defined in this resource, then pass it through to the overridden xSet method and execute the individual resource logic.\nThis method alone, can cut down a lot of repetitive code if you need to engage a logger, or send notifications to a monitoring tool that a configuration has started converging this is where you would want to do it and it would stop you from littering your individual resources with the exact same code. This approach makes your implementation neater, reduces code re-usage but also allows you to have a central place to change the workflow if required.\nGeneral Methods The second benefit to this, is the ability to have shared methods defined on the base class that can be used across all resources. Take for example a method called $this.WriteLog().\nPotentially WriteLog() might send a line to a log file on disk, or send an SNMP trap to an external monitor - the implementation of this code when defined on the base resource is only made once and can be used across all resources that utilize the Base class, and similar to the shared Set method, you have a central place to change this - in case a new monitoring system has been brought into production it reduces the need to change code to a single point in the base class.\nThe actual implementation of the base class for this project can be found here and you can see I’ve already defined a number of default methods. Ideally I will look to expand this to include a number of useful methods that can be used across the board for all resources so things like Logging and checking restart times can be moved to this.\nClasses in PowerShell will be the start of a lot of great things, and this for me is one of the huge benefits on top of class based resources alone.\n",
+  "wordCount" : "1010",
+  "inLanguage": "en",
+  "datePublished": "2016-06-16T20:00:21+01:00",
+  "dateModified": "2016-06-16T20:00:21+01:00",
+  "author":{
+    "@type": "Person",
+    "name": "Luke Griffith"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://lukegriffith.co.uk/blog/inheritance-in-powershell-dsc-resources/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Luke Griffith",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://lukegriffith.co.uk/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://lukegriffith.co.uk/" accesskey="h" title="Luke Griffith (Alt + H)">Luke Griffith</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://lukegriffith.co.uk/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://lukegriffith.co.uk/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://lukegriffith.co.uk/blog/" title="blog">
+                    <span>blog</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Inheritance in PowerShell DSC resources
+    </h1>
+    <div class="post-meta"><span title='2016-06-16 20:00:21 +0100 BST'>June 16, 2016</span>&nbsp;·&nbsp;Luke Griffith
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="intro">Intro<a hidden class="anchor" aria-hidden="true" href="#intro">#</a></h1>
+<p>Last week i made a blog post about the DSC framework and its limitations, I can now withdraw that statement. for me it was a learning experience and taught me to always test on multiple versions and operating systems before you come to a theory.</p>
+<p>This post is to show an example of how to use the DSC framework in a better way, to hopefully reduce code smells and reduce repetitive code use, keeping close to agile principles. In the WMF 4 way of writing resources, many times i came across functions that I was using time and time again in different modules that had DSC resources.</p>
+<p>Eventually I settled for a helper module that my resources depended on but due to the limitations of the WMF4 LCM and pull server - having a requirement of a module that was not already located on the box caused issues for the download manager as it could not validate the modules. After a number of hacks and effectively bending Powershell and DSC out of shape, I managed to get my helper module and use it as a central store for useful functions to be used across a number of DSC resources.</p>
+<p>Now on WMF 5, utilizing class based resources and inheritance I believe there is a better way to achieve this.</p>
+<h1 id="dsc-inheritance">DSC Inheritance<a hidden class="anchor" aria-hidden="true" href="#dsc-inheritance">#</a></h1>
+<p><a href="https://github.com/lukemgriffith/DSCInheritance">GITHUB PROJECT LINK</a></p>
+<p>See the above link to the GitHub project, I&rsquo;ve used this as an example of how inheritance can be achieved in DSC, in this project you have the two Powershell modules</p>
+<pre><code>-- Modules 
+    |-- Base
+        |-- Base.psm1
+        |-- Base.psd1
+    |-- InheritedResource
+        |-- InheritedResource.psm1
+        |-- InheritedResource.psd1
+</code></pre>
+<p>Having these modules located in the module path, will export a single DSC resource, InheritedResource and it has the following properties.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">wrk</span><span class="err">:</span><span class="p">\&gt;</span> <span class="nb">Get-DscResource</span> <span class="n">-Name</span> <span class="n">InheritedResource</span> <span class="p">|</span> <span class="p">%</span> <span class="n">Properties</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Name</span>                 <span class="n">PropertyType</span>   <span class="n">IsMandatory</span> <span class="n">Values</span>                     
+</span></span><span class="line"><span class="cl"><span class="p">----</span>                 <span class="p">------------</span>   <span class="p">-----------</span> <span class="p">------</span>                     
+</span></span><span class="line"><span class="cl"><span class="n">Enforce</span>              <span class="p">[</span><span class="no">string</span><span class="p">]</span>              <span class="n">True</span> <span class="p">{</span><span class="n">Always</span><span class="p">,</span> <span class="n">Controlled</span><span class="p">,</span> <span class="n">Never</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Ensure</span>               <span class="p">[</span><span class="no">string</span><span class="p">]</span>              <span class="n">True</span> <span class="p">{</span><span class="n">Absent</span><span class="p">,</span> <span class="n">Present</span><span class="p">}</span>          
+</span></span><span class="line"><span class="cl"><span class="n">SettingName</span>          <span class="p">[</span><span class="no">string</span><span class="p">]</span>              <span class="n">True</span> <span class="p">{}</span>                         
+</span></span><span class="line"><span class="cl"><span class="n">DependsOn</span>            <span class="p">[</span><span class="no">string[]</span><span class="p">]</span>           <span class="n">False</span> <span class="p">{}</span>                         
+</span></span><span class="line"><span class="cl"><span class="n">PsDscRunAsCredential</span> <span class="p">[</span><span class="no">PSCredential</span><span class="p">]</span>       <span class="n">False</span> <span class="p">{}</span>                
+</span></span><span class="line"><span class="cl"> 
+</span></span></code></pre></div><p>If you look at the class for InheritedResource, not a lot is going on compared to what you might expect a standard DSC resource to have. A single property $SettingName is declared and made the Key of the resource, yet without a valid Get/Set/Test the resource is still valid and you can compile a mof, Furthermore the properties above Enforce and Ensure are no where to be seen.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl"><span class="n">using</span> <span class="n">Module</span> <span class="n">Base</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="n">DscResource</span><span class="p">()]</span>
+</span></span><span class="line"><span class="cl"><span class="kd">class</span><span class="w"> </span><span class="nb">InheritedResource :</span> <span class="n">Base</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">DSCProperty</span><span class="p">(</span><span class="n">Key</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">String</span><span class="p">]</span><span class="nv">$SettingName</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>How this is achieved is by inheriting form the base resource (See <strong>InheritedResource : Base</strong>), this ensures that InheritedResource has all the properties of base, unless they are overwritten by the child class. This allows me to inherit the Get, Set and Test method to effectively abstract away the inner workings of my resource, leaving only superficial settings available in the class.</p>
+<h1 id="abstract-the-get--set--test">Abstract the Get / Set / Test<a hidden class="anchor" aria-hidden="true" href="#abstract-the-get--set--test">#</a></h1>
+<p>First question is why would you want to do this? Well really you wouldn&rsquo;t in this form, each resource really needs its own implementation of the Get, Set and Test because it needs to implement its own logic to configure what your resource is developed for. Where could this be helpful? well abstracting the implementation of the methods allows you more control over what happens inside the resource - Say for example base looked like this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl"><span class="n">using</span> <span class="n">Module</span> <span class="n">Base</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="n">DscResource</span><span class="p">()]</span>
+</span></span><span class="line"><span class="cl"><span class="kd">class</span><span class="w"> </span><span class="nb">Base
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">Bool</span><span class="p">]</span><span class="nv">$Enforce</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">Void</span><span class="p">]</span><span class="n">Set</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nb">Start-Logger</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nv">$ShouldRun</span> <span class="p">=</span> <span class="nb">Get-EnforcementConfig</span> <span class="nv">$Enforce</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$ShouldRun</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="nv">$this</span><span class="p">.</span><span class="py">xSet</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">Void</span><span class="p">]</span><span class="n">xSet</span><span class="p">()</span> <span class="p">{}</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>With this implementation of the base resource, I would be able to override the xSet method on the inherited class and any Set that was triggered by the DSC framework would always go through this method before executing the inherited resource set.</p>
+<p>The benefits this gives allows you to have a single point to trap logs, check if a set should run and other business logic that your configuration workflows might need, in this case the Inherited Resource might look something like this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="line"><span class="cl"><span class="kd">class</span><span class="w"> </span><span class="nb">InheritedResource :</span> <span class="n">Base</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="n">DSCProperty</span><span class="p">(</span><span class="n">Key</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">String</span><span class="p">]</span><span class="nv">$SettingName</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">Void</span><span class="p">]</span><span class="n">xSet</span><span class="p">()</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nb">Set-SettingName</span> <span class="nv">$this</span><span class="p">.</span><span class="py">SettingName</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>So the above inheritedResource Set method that DSC executes would first hit the Base Set method, execute the central logic defined in this resource, then pass it through to the overridden xSet method and execute the individual resource logic.</p>
+<p>This method alone, can cut down a lot of repetitive code if you need to engage a logger, or send notifications to a monitoring tool that a configuration has started converging this is where you would want to do it and it would stop you from littering your individual resources with the exact same code. This approach makes your implementation neater, reduces code re-usage but also allows you to have a central place to change the workflow if required.</p>
+<h1 id="general-methods">General Methods<a hidden class="anchor" aria-hidden="true" href="#general-methods">#</a></h1>
+<p>The second benefit to this, is the ability to have shared methods defined on the base class that can be used across all resources. Take for example a method called $this.WriteLog().</p>
+<p>Potentially WriteLog() might send a line to a log file on disk, or send an SNMP trap to an external monitor - the implementation of this code when defined on the base resource is only made once and can be used across all resources that utilize the Base class, and similar to the shared Set method, you have a central place to change this - in case a new monitoring system has been brought into production it reduces the need to change code to a single point in the base class.</p>
+<p>The actual implementation of the base class for this project can be found <a href="https://github.com/lukemgriffith/DSCInheritance/blob/master/Modules/Base/Base.psm1">here</a> and you can see I&rsquo;ve already defined a number of default methods. Ideally I will look to expand this to include a number of useful methods that can be used across the board for all resources so things like Logging and checking restart times can be moved to this.</p>
+<p>Classes in PowerShell will be the start of a lot of great things, and this for me is one of the huge benefits on top of class based resources alone.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://lukegriffith.co.uk/">Luke Griffith</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
